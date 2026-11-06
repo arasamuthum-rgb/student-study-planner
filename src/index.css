@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- design tokens (space separated RGB channels) ---------- */
+:root {
+  color-scheme: light;
+  --bg: 245 246 249; --surface: 255 255 255; --sunken: 238 240 246; --line: 224 228 238;
+  --fg: 20 27 48; --muted: 94 104 130; --marker: 255 226 89;
+  --ind: 79 70 229; --ok: 4 120 87; --warn: 180 83 9; --bad: 190 18 60;
+  --accent-l: 52 72 235; --accent-d: 142 158 255;
+  --accent: var(--accent-l); --accent-fg: 255 255 255;
+  --c-line: rgb(var(--line)); --c-muted: rgb(var(--muted)); --c-surface: rgb(var(--surface));
+  --c-accent: rgb(var(--accent)); --c-ind: rgb(var(--ind)); --c-fg: rgb(var(--fg));
+}
+:root[data-accent='indigo']  { --accent-l: 2 120 185;  --accent-d: 56 189 248; }
+:root[data-accent='emerald'] { --accent-l: 4 120 87;   --accent-d: 52 211 153; }
+:root[data-accent='violet']  { --accent-l: 109 40 217; --accent-d: 167 139 250; }
+:root[data-accent='rose']    { --accent-l: 190 18 60;  --accent-d: 251 113 133; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: 12 16 30; --surface: 19 25 43; --sunken: 29 37 61; --line: 44 54 82;
+    --fg: 230 234 246; --muted: 150 160 187; --marker: 250 204 21;
+    --ind: 129 140 248; --ok: 52 211 153; --warn: 251 191 36; --bad: 251 113 133;
+    --accent: var(--accent-d); --accent-fg: 8 20 36;
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: 12 16 30; --surface: 19 25 43; --sunken: 29 37 61; --line: 44 54 82;
+  --fg: 230 234 246; --muted: 150 160 187; --marker: 250 204 21;
+  --ind: 129 140 248; --ok: 52 211 153; --warn: 251 191 36; --bad: 251 113 133;
+  --accent: var(--accent-d); --accent-fg: 8 20 36;
+}
+
+html, body { height: 100%; }
+h1, h2, h3, .font-display { font-family: 'Bricolage Grotesque Variable', 'Figtree Variable', ui-sans-serif, system-ui, sans-serif; font-optical-sizing: auto; }
+body {
+  margin: 0; background: rgb(var(--bg)); color: rgb(var(--fg));
+  font-family: 'Figtree Variable', Figtree, ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: 'tnum' 0; -webkit-font-smoothing: antialiased; line-height: 1.5;
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box;
+}
+#root { min-height: 100%; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+* { scrollbar-width: thin; scrollbar-color: rgb(var(--line)) transparent; }
+:focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 2px; border-radius: 6px; }
+::selection { background: rgb(var(--accent) / 0.25); }
+
+/* native <dialog> modal styling */
+dialog.modal { padding: 0; border: 0; background: transparent; color: inherit; max-width: 100vw; max-height: 100dvh; overflow: visible; }
+dialog.modal::backdrop { background: rgb(8 15 30 / 0.5); backdrop-filter: blur(2px); }
+dialog.modal[open]::backdrop { animation: fadeIn .16s ease-out; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.skeleton { position: relative; overflow: hidden; background: rgb(var(--sunken)); border-radius: 8px; }
+.skeleton::after { content: ''; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(var(--surface) / 0.7), transparent); animation: shimmer 1.3s infinite; }
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+}
+
+.recharts-text { fill: rgb(var(--muted)); font-size: 12px; }
+.recharts-cartesian-axis-tick-value { fill: rgb(var(--muted)); }
+
+/* highlighter swipe: the one "you are here" cue used for the active nav item and today markers */
+.marker { background: linear-gradient(100deg, rgb(var(--marker) / 0) 0%, rgb(var(--marker) / .55) 4%, rgb(var(--marker) / .55) 96%, rgb(var(--marker) / 0) 100%); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme='light']) .marker { background: rgb(var(--marker) / .18); } }
+:root[data-theme='dark'] .marker { background: rgb(var(--marker) / .18); }
